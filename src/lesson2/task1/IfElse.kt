@@ -3,7 +3,9 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.max
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -68,7 +70,12 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String = when {
+    age % 100 in 5..20 -> "$age лет"
+    age % 10 in 2..4 -> "$age года"
+    age % 10 == 1 -> "$age год"
+    else -> "$age лет"
+}
 
 /**
  * Простая (2 балла)
@@ -81,7 +88,18 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val way1 = v1 * t1
+    val way2 = v2 * t2
+    val way3 = v3 * t3
+    val halfway = (way1 + way2 + way3) / 2
+    // s = vt, s = way
+    return when {
+        way1 >= halfway -> halfway / v1
+        way1 + way2 >= halfway -> t1 + (halfway - way1) / v2
+        else -> t1 + t2 + (halfway - way1 - way2) / v3
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -96,7 +114,21 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    //DeadFromRook1 (2) - угроза от ладьи 1(2)
+    var DeadFromRook1 = false
+    var DeadFromRook2 = false
+    if (rookX1 == kingX || rookY1 == kingY)
+        DeadFromRook1 = true
+    if (rookX2 == kingX || rookY2 == kingY)
+        DeadFromRook2 = true
+    return when {
+        !DeadFromRook1 && !DeadFromRook2 -> 0
+        DeadFromRook1 && DeadFromRook2 -> 3
+        DeadFromRook1 -> 1
+        else -> 2
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -112,7 +144,23 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    //DeadFromRook - угроза от ладьи
+    //DeadFromBishop - угроза от слона
+    var DeadFromRook = false
+    var DeadFromBishop = false
+    if (rookX == kingX || rookY == kingY)
+        DeadFromRook = true
+    if ((bishopX - bishopY == kingX - kingY) || (bishopX + bishopY == kingX + kingY))
+        //проверка диагоналей
+        DeadFromBishop = true
+    return when {
+        !DeadFromRook && !DeadFromBishop -> 0
+        DeadFromRook && DeadFromBishop -> 3
+        DeadFromRook -> 1
+        else -> 2
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -122,7 +170,33 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    // прямоугольный: a^2 + b^2 = c^2
+    // остроугольный: a^2 + b^2 > c^2
+    // тупоугольный: a^2 + b^2 < c^2
+    if ((a + b < c) || (a + c < b) || (b + c < a))
+        return -1
+    val maxsum: Double
+    val maxelement: Double
+    if (a > c && a > b) {
+        maxsum = b.pow(2) + c.pow(2)
+        maxelement = a.pow(2)
+    }
+    else if (b > c && b > a) {
+        maxsum = a.pow(2) + c.pow(2)
+        maxelement = b.pow(2)
+    }
+    else {
+        maxsum = a.pow(2) + b.pow(2)
+        maxelement = c.pow(2)
+    }
+    if (maxsum > maxelement)
+        return 0
+    else if (maxsum == maxelement)
+        return 1
+    else
+        return 2
+}
 
 /**
  * Средняя (3 балла)
@@ -132,4 +206,10 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
+    (c > b || a > d) -> -1
+    (a <= c && c <= d && d <= b) -> d - c // A C D B
+    (a <= c && c <= b && b <= d) -> b - c // A C B D
+    (c <= a && b <= d) -> b - a // C A B D
+    else -> d - a // A(C) B(D)
+}
