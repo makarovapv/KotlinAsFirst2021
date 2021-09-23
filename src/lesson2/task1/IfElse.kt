@@ -204,7 +204,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Даны четыре точки на одной прямой: A, B, C и D.
  * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
  * Найти длину пересечения отрезков AB и CD.
- * Если пересечения нет, вернуть -1.
+ * Если пересечения нет , вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
     (c > b || a > d) -> -1
