@@ -116,16 +116,12 @@ fun whichRookThreatens(
     rookX2: Int, rookY2: Int
 ): Int {
     //DeadFromRook1 (2) - угроза от ладьи 1(2)
-    var DeadFromRook1 = false
-    var DeadFromRook2 = false
-    if (rookX1 == kingX || rookY1 == kingY)
-        DeadFromRook1 = true
-    if (rookX2 == kingX || rookY2 == kingY)
-        DeadFromRook2 = true
+    val deadfromrook1 = (rookX1 == kingX || rookY1 == kingY)
+    val deadfromrook2 = (rookX2 == kingX || rookY2 == kingY)
     return when {
-        !DeadFromRook1 && !DeadFromRook2 -> 0
-        DeadFromRook1 && DeadFromRook2 -> 3
-        DeadFromRook1 -> 1
+        !deadfromrook1 && !deadfromrook2 -> 0
+        deadfromrook1 && deadfromrook2 -> 3
+        deadfromrook1 -> 1
         else -> 2
     }
 }
@@ -147,17 +143,12 @@ fun rookOrBishopThreatens(
 ): Int {
     //DeadFromRook - угроза от ладьи
     //DeadFromBishop - угроза от слона
-    var DeadFromRook = false
-    var DeadFromBishop = false
-    if (rookX == kingX || rookY == kingY)
-        DeadFromRook = true
-    if ((bishopX - bishopY == kingX - kingY) || (bishopX + bishopY == kingX + kingY))
-        //проверка диагоналей
-        DeadFromBishop = true
+    val deadfromrook = (rookX == kingX || rookY == kingY)
+    val deadfrombishop = ((bishopX - bishopY == kingX - kingY) || (bishopX + bishopY == kingX + kingY))
     return when {
-        !DeadFromRook && !DeadFromBishop -> 0
-        DeadFromRook && DeadFromBishop -> 3
-        DeadFromRook -> 1
+        !deadfromrook && !deadfrombishop -> 0
+        deadfromrook && deadfrombishop -> 3
+        deadfromrook -> 1
         else -> 2
     }
 }
