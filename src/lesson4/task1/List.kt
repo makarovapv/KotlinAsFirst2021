@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 // Урок 4: списки
 // Максимальное количество баллов = 12
@@ -120,14 +121,24 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double {
+    val f = v.map { it * it }
+    val abs: Double = if (f.isEmpty()) 0.0
+    else sqrt(f.sum())
+    return abs
+}
 
 /**
  * Простая (2 балла)
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double = TODO()
+fun mean(list: List<Double>): Double {
+    val k = list.count()
+    val summa = list.sum()
+    if (list.isEmpty()) return 0.0
+    else return summa / k
+}
 
 /**
  * Средняя (3 балла)
@@ -137,7 +148,21 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val k = list.count()
+    val summa = list.sum()
+    when {
+        list.isEmpty() -> list
+        else -> {
+            for (i in 0 until list.size) {
+                val element = list[i]
+                list[i] = element - summa / k
+            }
+        }
+    }
+    return list
+}
+
 
 /**
  * Средняя (3 балла)
@@ -146,7 +171,14 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    var c = 0
+    if (a.isEmpty() && b.isEmpty()) return c
+    for (i in 0 until a.size) {
+        c += a[i] * b[i]
+    }
+    return c
+}
 
 /**
  * Средняя (3 балла)
@@ -156,7 +188,15 @@ fun times(a: List<Int>, b: List<Int>): Int = TODO()
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    var otvet = 0
+    if (p.isNotEmpty()) {
+        for (i in 0 until p.size) {
+            otvet += p[i] * x.toFloat().pow(i).toInt()
+        }
+    } else otvet = 0
+    return otvet
+}
 
 /**
  * Средняя (3 балла)
@@ -168,7 +208,16 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    if (list.isEmpty()) return list
+    else {
+        for (i in 1 until list.size) {
+            list[i] = list[i - 1] + list[i]
+        }
+    }
+    return list
+
+}
 
 /**
  * Средняя (3 балла)
@@ -177,7 +226,18 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    var n1 = n
+    var delitel = 2
+    val list = mutableListOf<Int>()
+    while (n1 > 1) {
+        if (n1 % delitel == 0) {
+            n1 /= delitel
+            list.add(delitel)
+        } else delitel++
+    }
+    return list
+}
 
 /**
  * Сложная (4 балла)
@@ -186,7 +246,18 @@ fun factorize(n: Int): List<Int> = TODO()
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    var n1 = n
+    var delitel = 2
+    val list = mutableListOf<Int>()
+    while (n1 > 1) {
+        if (n1 % delitel == 0) {
+            n1 /= delitel
+            list.add(delitel)
+        } else delitel++
+    }
+    return list.joinToString(separator = "*")
+}
 
 /**
  * Средняя (3 балла)
