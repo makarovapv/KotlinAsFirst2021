@@ -6,6 +6,7 @@ import java.time.Clock.system
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sqrt
+import kotlin.math.pow
 
 
 // Урок 3: циклы
@@ -288,16 +289,13 @@ fun hasDifferentDigits(n: Int): Boolean {
         if (proc != ((num % 100 - num % 10) / 10) && num > 99) {
             different = true
             break
-        }
-        else if (num < 100){
+        } else if (num < 100) {
             if (num % 10 != num / 10) {
                 different = true
                 break
-            }
-            else different = false
+            } else different = false
             break
-        }
-        else {
+        } else {
             different = false
             num /= 10
         }
@@ -336,7 +334,30 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var count = 1
+    var otvet = emptyArray<Int>()
+    var kv = 1
+    while (count != n + 1) {
+        kv = count.toFloat().pow(2).toInt()
+        if (kv < 10) otvet += kv
+        else if (kv > 10 && kv < 100) {
+            otvet += kv / 10
+            otvet += kv % 10
+        } else if (kv > 99 && kv < 1000) {
+            otvet += kv / 100
+            otvet += kv / 10 % 10
+            otvet += kv % 10
+        } else if (kv > 999 && kv < 10000) {
+            otvet += kv / 1000
+            otvet += kv / 100 / 10
+            otvet += kv / 100 % 10
+            otvet += kv % 10
+        }
+        count++
+    }
+    return otvet[n - 1]
+}
 
 /**
  * Сложная (5 баллов)
@@ -347,4 +368,26 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+
+    var count = 1
+    var otvet = emptyArray<Int>()
+    while (count != n + 1) {
+        for (x in 1..n + 1) if (fib(x) < 10) otvet += fib(x)
+        else if (fib(x) > 10 && fib(x) < 100) {
+            otvet += fib(x) / 10
+            otvet += fib(x) % 10
+        } else if (fib(x) > 99 && fib(x) < 1000) {
+            otvet += fib(x) / 100
+            otvet += fib(x) / 10 % 10
+            otvet += fib(x) % 10
+        } else if (fib(x) > 999 && fib(x) < 10000) {
+            otvet += fib(x) / 1000
+            otvet += fib(x) / 100 / 10
+            otvet += fib(x) / 100 % 10
+            otvet += fib(x) % 10
+        }
+        count++
+    }
+    return otvet[n - 1]
+}

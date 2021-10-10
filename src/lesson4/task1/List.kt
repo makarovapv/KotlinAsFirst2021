@@ -239,6 +239,7 @@ fun factorize(n: Int): List<Int> {
     return list
 }
 
+
 /**
  * Сложная (4 балла)
  *
@@ -266,7 +267,17 @@ fun factorizeToString(n: Int): String {
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    var n1 = n
+    val list = mutableListOf<Int>()
+    if (n1 == 0) return listOf(0)
+    while (n1 > 0) {
+        list.add(0, n1 % base)
+        n1 /= base
+    }
+    return list
+}
+
 
 /**
  * Сложная (4 балла)
@@ -279,7 +290,17 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String {
+    val alp = listOf( "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
+    var otvet = ""
+    val list = convert(n, base).toMutableList()
+
+    for (i in 0 until list.size) {
+        if (list[i] >= 10) otvet += alp[list[i] - 10]
+        else otvet += list[i].toString()
+    }
+    return otvet
+}
 
 /**
  * Средняя (3 балла)
@@ -312,7 +333,21 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val alp = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val number = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    var otvet = ""
+    var new = n
+    var down = 0
+    while (new > 0) {
+        while (new - number[down] >= 0) { // заданное число - римская цифра >= 0
+            otvet += alp[down]
+            new -= number[down]
+        }
+        down++
+    }
+    return otvet
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -321,4 +356,78 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): MutableList<String> = TODO()
+//{
+//    val numb = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+//    val numbss = listOf("одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+//    val tenperv =
+//        listOf(
+//            "десять",
+//            "одиннадцать",
+//            "двенадцать",
+//            "тринадцать",
+//            "четырнадцать",
+//            "пятнадцать",
+//            "шестнадцать",
+//            "семнадцать",
+//            "восемнадцать",
+//            "девятнадцать"
+//        )
+//    val tennorm =
+//        listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+//    val hundreds =
+//        listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+//
+//    val first = n / 1000 // первая часть числа
+//    val second = n % 1000 // вторая часть числа
+//
+//    val result = mutableListOf<String>()
+//    if (first > 0) {
+//        if (first / 100 >= 1) {
+//            val hundr = first / 100
+//            result.add(hundreds[hundr - 1])
+//        }
+//        if (first % 100 / 10 == 1) {
+//            val tperv = first % 100 % 10
+//            result.add(tenperv[tperv])
+//        } else if (first % 100 / 10 == 0) {
+//            val nb = first % 100 % 10
+//            if (nb > 0) result.add(numbss[nb - 1])
+//        } else {
+//            val tnorm = first % 100 / 10
+//            result.add(tennorm[tnorm - 2])
+//            val nb = first % 100 % 10
+//            if (nb > 0) result.add(numb[nb - 1])
+//        }
+//        if ((first / 10 % 10 != 1) && (first % 10 == 1)) result.add("тысяча")
+//        else if ((first % 100 / 10 != 1) && (first % 10 == 2 || first % 10 == 3 || first % 10 == 4)) result.add("тысячи")
+//        else result.add("тысяч")
+//    }
+//
+//    val otvet = mutableListOf<String>()
+//    if (second / 100 >= 1) {
+//        val hundr = second / 100
+//        otvet.add(hundreds[hundr - 1])
+//    }
+//    if (second % 100 / 10 == 1) {
+//        val tperv = second % 100 % 10
+//        otvet.add(tenperv[tperv])
+//    } else if (second % 100 / 10 == 0) {
+//        val nb = second % 100 % 10
+//        if (nb > 0) otvet.add(numb[nb - 1])
+//    } else {
+//        val tnorm = second % 100 / 10
+//        otvet.add(tennorm[tnorm - 2])
+//        val nb = second % 100 % 10
+//        if (nb > 0) otvet.add(numb[nb - 1])
+//    }
+//    // я сломалась на этом моменте и не понимаю как дойти до нормального финала :(
+//    // из-за MutableList<String> в самом начала ответ в String не выводится :((((
+////    val answer = (result + otvet).joinToString(" ")
+////    return answer as MutableList<String>
+//
+//}
+
+
+
+
