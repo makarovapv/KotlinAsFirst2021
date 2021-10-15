@@ -121,24 +121,14 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    val f = v.map { it * it }
-    val abs: Double = if (f.isEmpty()) 0.0
-    else sqrt(f.sum())
-    return abs
-}
+fun abs(v: List<Double>): Double = sqrt(v.sumOf { it * it })
 
 /**
  * Простая (2 балла)
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    val k = list.count()
-    val summa = list.sum()
-    if (list.isEmpty()) return 0.0
-    else return summa / k
-}
+fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sumOf { it } / list.count().toDouble()
 
 /**
  * Средняя (3 балла)
@@ -149,17 +139,8 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val k = list.count()
     val summa = list.sum()
-    when {
-        list.isEmpty() -> list
-        else -> {
-            for (i in 0 until list.size) {
-                val element = list[i]
-                list[i] = element - summa / k
-            }
-        }
-    }
+    for (i in 0 until list.size) list[i] = list[i] - summa / list.count()
     return list
 }
 
@@ -171,14 +152,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var c = 0
-    if (a.isEmpty() && b.isEmpty()) return c
-    for (i in 0 until a.size) {
-        c += a[i] * b[i]
-    }
-    return c
-}
+fun times(a: List<Int>, b: List<Int>): Int = a.mapIndexed { index, el -> el * b[index] }.sum()
 
 /**
  * Средняя (3 балла)
@@ -188,15 +162,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    var otvet = 0
-    if (p.isNotEmpty()) {
-        for (i in 0 until p.size) {
-            otvet += p[i] * x.toFloat().pow(i).toInt()
-        }
-    } else otvet = 0
-    return otvet
-}
+fun polynom(p: List<Int>, x: Int): Int = p.mapIndexed { index, it -> it * x.toDouble().pow(index) }.sum().toInt()
 
 /**
  * Средняя (3 балла)
@@ -209,14 +175,10 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
-    else {
-        for (i in 1 until list.size) {
-            list[i] = list[i - 1] + list[i]
-        }
+    for (i in 1 until list.size) {
+        list[i] = list[i - 1] + list[i]
     }
     return list
-
 }
 
 /**
@@ -247,18 +209,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var n1 = n
-    var delitel = 2
-    val list = mutableListOf<Int>()
-    while (n1 > 1) {
-        if (n1 % delitel == 0) {
-            n1 /= delitel
-            list.add(delitel)
-        } else delitel++
-    }
-    return list.joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя (3 балла)
@@ -291,12 +242,11 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    val alp = listOf( "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z")
     var otvet = ""
+    val a = 'a'
     val list = convert(n, base).toMutableList()
-
     for (i in 0 until list.size) {
-        if (list[i] >= 10) otvet += alp[list[i] - 10]
+        if (list[i] >= 10) otvet += a + (list[i] - 10)
         else otvet += list[i].toString()
     }
     return otvet
@@ -356,77 +306,73 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): MutableList<String> = TODO()
-//{
-//    val numb = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-//    val numbss = listOf("одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-//    val tenperv =
-//        listOf(
-//            "десять",
-//            "одиннадцать",
-//            "двенадцать",
-//            "тринадцать",
-//            "четырнадцать",
-//            "пятнадцать",
-//            "шестнадцать",
-//            "семнадцать",
-//            "восемнадцать",
-//            "девятнадцать"
-//        )
-//    val tennorm =
-//        listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-//    val hundreds =
-//        listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
-//
-//    val first = n / 1000 // первая часть числа
-//    val second = n % 1000 // вторая часть числа
-//
-//    val result = mutableListOf<String>()
-//    if (first > 0) {
-//        if (first / 100 >= 1) {
-//            val hundr = first / 100
-//            result.add(hundreds[hundr - 1])
-//        }
-//        if (first % 100 / 10 == 1) {
-//            val tperv = first % 100 % 10
-//            result.add(tenperv[tperv])
-//        } else if (first % 100 / 10 == 0) {
-//            val nb = first % 100 % 10
-//            if (nb > 0) result.add(numbss[nb - 1])
-//        } else {
-//            val tnorm = first % 100 / 10
-//            result.add(tennorm[tnorm - 2])
-//            val nb = first % 100 % 10
-//            if (nb > 0) result.add(numb[nb - 1])
-//        }
-//        if ((first / 10 % 10 != 1) && (first % 10 == 1)) result.add("тысяча")
-//        else if ((first % 100 / 10 != 1) && (first % 10 == 2 || first % 10 == 3 || first % 10 == 4)) result.add("тысячи")
-//        else result.add("тысяч")
-//    }
-//
-//    val otvet = mutableListOf<String>()
-//    if (second / 100 >= 1) {
-//        val hundr = second / 100
-//        otvet.add(hundreds[hundr - 1])
-//    }
-//    if (second % 100 / 10 == 1) {
-//        val tperv = second % 100 % 10
-//        otvet.add(tenperv[tperv])
-//    } else if (second % 100 / 10 == 0) {
-//        val nb = second % 100 % 10
-//        if (nb > 0) otvet.add(numb[nb - 1])
-//    } else {
-//        val tnorm = second % 100 / 10
-//        otvet.add(tennorm[tnorm - 2])
-//        val nb = second % 100 % 10
-//        if (nb > 0) otvet.add(numb[nb - 1])
-//    }
-//    // я сломалась на этом моменте и не понимаю как дойти до нормального финала :(
-//    // из-за MutableList<String> в самом начала ответ в String не выводится :((((
-////    val answer = (result + otvet).joinToString(" ")
-////    return answer as MutableList<String>
-//
-//}
+fun russian(n: Int): String {
+    val numb = listOf("один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val numbss = listOf("одна", "две", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val tenperv =
+        listOf(
+            "десять",
+            "одиннадцать",
+            "двенадцать",
+            "тринадцать",
+            "четырнадцать",
+            "пятнадцать",
+            "шестнадцать",
+            "семнадцать",
+            "восемнадцать",
+            "девятнадцать"
+        )
+    val tennorm =
+        listOf("двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+    val hundreds =
+        listOf("сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+
+    val first = n / 1000 // первая часть числа
+    val second = n % 1000 // вторая часть числа
+
+    val result = mutableListOf<String>()
+    if (first > 0) {
+        if (first / 100 >= 1) {
+            val hundr = first / 100
+            result.add(hundreds[hundr - 1])
+        }
+        if (first % 100 / 10 == 1) {
+            val tperv = first % 100 % 10
+            result.add(tenperv[tperv])
+        } else if (first % 100 / 10 == 0) {
+            val nb = first % 100 % 10
+            if (nb > 0) result.add(numbss[nb - 1])
+        } else {
+            val tnorm = first % 100 / 10
+            result.add(tennorm[tnorm - 2])
+            val nb = first % 100 % 10
+            if (nb > 0) result.add(numbss[nb - 1])
+        }
+        if ((first / 10 % 10 != 1) && (first % 10 == 1)) result.add("тысяча")
+        else if ((first % 100 / 10 != 1) && (first % 10 == 2 || first % 10 == 3 || first % 10 == 4)) result.add("тысячи")
+        else result.add("тысяч")
+    }
+
+    val otvet = mutableListOf<String>()
+    if (second / 100 >= 1) {
+        val hundr = second / 100
+        otvet.add(hundreds[hundr - 1])
+    }
+    if (second % 100 / 10 == 1) {
+        val tperv = second % 100 % 10
+        otvet.add(tenperv[tperv])
+    } else if (second % 100 / 10 == 0) {
+        val nb = second % 100 % 10
+        if (nb > 0) otvet.add(numb[nb - 1])
+    } else {
+        val tnorm = second % 100 / 10
+        otvet.add(tennorm[tnorm - 2])
+        val nb = second % 100 % 10
+        if (nb > 0) otvet.add(numb[nb - 1])
+    }
+    val answer = (result + otvet).joinToString(" ")
+    return answer
+}
 
 
 

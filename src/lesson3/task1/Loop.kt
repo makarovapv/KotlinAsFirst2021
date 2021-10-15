@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
 import kotlin.math.*
 
 
@@ -216,7 +217,16 @@ fun isPalindrome(n: Int): Boolean = n == revert(n)
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var num = n
+    var last = n % 10
+    while (num > 0) {
+        if (num % 10 != last) return true
+        last = num % 10
+        num /= 10
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -227,7 +237,23 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+
+fun sin(x: Double, eps: Double): Double {
+    var otvet = x % (2 * PI)
+    var symbol = 1
+    var mn = 3
+    var x1 = x
+    if (x % PI == 0.0) return 0.0
+    if (x % (3 * PI / 2) == PI / 2) return 1.0
+    if (x % (3 * PI / 2) == 0.0) return -1.0
+    while (abs(x1) > eps) {
+        symbol = -symbol // смена знака (с + на -)
+        x1 = symbol * (x % (2 * PI)).pow(mn) / factorial(mn) // формула
+        mn += 2 // по формуле увеличиваем множитель
+        otvet += x1
+    }
+    return otvet
+}
 
 /**
  * Средняя (4 балла)
@@ -238,40 +264,47 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double {
+    var otvet = x % (2 * PI)
+    var symbol = 1
+    var mn = 2
+    var x1 = 1.0
+    if (x % PI == PI / 2) return 0.0
+    return if ((x / PI) % 2 == 0.0) 1.0 else -1.0
+    while (abs(x1) > eps) {
+        symbol = -symbol // смена знака (с + на -)
+        x1 = symbol * (x % (2 * PI)).pow(mn) / factorial(mn) // формула
+        mn += 2 // по формуле увеличиваем множитель
+        otvet += x1
+    }
+    return otvet
+}
 
 /**
  * Сложная (4 балла)
  *
  * Найти n-ю цифру последовательности из квадратов целых чисел:
- * 149162536496481100121144...
+ * 149162536496481100121144169...
  * Например, 2-я цифра равна 4, 7-я 5, 12-я 6.
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
+
 fun squareSequenceDigit(n: Int): Int {
-    var count = 1
-    var otvet = emptyArray<Int>()
+    var count = 0
     var kv: Int
-    while (count != n + 1) {
-        kv = count.toFloat().pow(2).toInt()
-        if (kv < 10) otvet += kv
-        else if (kv > 10 && kv < 100) {
-            otvet += kv / 10
-            otvet += kv % 10
-        } else if (kv > 99 && kv < 1000) {
-            otvet += kv / 100
-            otvet += kv / 10 % 10
-            otvet += kv % 10
-        } else if (kv > 999 && kv < 10000) {
-            otvet += kv / 1000
-            otvet += kv / 100 / 10
-            otvet += kv / 100 % 10
-            otvet += kv % 10
+    var otvet = 0
+    while (count < n) {
+        for (i in 1..n) {
+            kv = sqr(i)
+            count += digitNumber(kv) //
+            if (count >= n) {
+                otvet = (kv / 10.0.pow(count - n) % 10).toInt()
+                break
+            }
         }
-        count++
     }
-    return otvet[n - 1]
+    return otvet
 }
 
 /**
@@ -284,25 +317,18 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-
-    var count = 1
-    var otvet = emptyArray<Int>()
-    while (count != n + 1) {
-        for (x in 1..n + 1) if (fib(x) < 10) otvet += fib(x)
-        else if (fib(x) > 10 && fib(x) < 100) {
-            otvet += fib(x) / 10
-            otvet += fib(x) % 10
-        } else if (fib(x) > 99 && fib(x) < 1000) {
-            otvet += fib(x) / 100
-            otvet += fib(x) / 10 % 10
-            otvet += fib(x) % 10
-        } else if (fib(x) > 999 && fib(x) < 10000) {
-            otvet += fib(x) / 1000
-            otvet += fib(x) / 100 / 10
-            otvet += fib(x) / 100 % 10
-            otvet += fib(x) % 10
+    var count = 0
+    var f: Int
+    var otvet = 0
+    while (count < n) {
+        for (i in 1..n) {
+            f = fib(i)
+            count += digitNumber(f) //
+            if (count >= n) {
+                otvet = (f / 10.0.pow(count - n) % 10).toInt()
+                break
+            }
         }
-        count++
     }
-    return otvet[n - 1]
+    return otvet
 }
