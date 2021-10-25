@@ -263,33 +263,18 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    val n = x % (2 * PI)
-    var i = 1
-    val result = 1.0
-    var new: Double
-    if (x % PI == PI / 2) return 0.0
-    return if ((x / PI) % 2 == 0.0) 1.0 else -1.0
-    while (true) {
-        new = n.pow(i * 2) / factorial(i * 2)
-        if (new < eps) return result
-        i++
+    val c = x % (2 * PI)
+    var j = 2.0
+    var result = 0.0
+    var n = 0 // степень
+    var i = 0.0 // значение
+    while (abs(i) > eps) {
+        i = (-1.0).pow(j) * c.pow(n) / factorial(n)
+        result += i
+        j++
+        n += 2
     }
     return result
-
-    //    if (n < 0) n += oneCircle
-    //    var result = 1.0
-    //    var i = 1
-    //    var elemNow: Double
-    //    while (true) {
-    //        elemNow = n.pow(i * 2) / factorial(i * 2)
-    //        if (i % 2 == 0) {
-    //            result += elemNow
-    //        } else {
-    //            result -= elemNow
-    //        }
-    //        if (elemNow < eps) return result
-    //        i++
-    //    }
 }
 
 /**
