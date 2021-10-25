@@ -76,7 +76,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var count = 0
-    var number = n
+    var number = abs(n)
     do {
         count++
         number /= 10
@@ -93,11 +93,9 @@ fun digitNumber(n: Int): Int {
 fun fib(n: Int): Int {
     var first = 1
     var second = 1
-    var sum: Int
     var x = 0
     while (x < n - 2) { // тк первые 2 элемента уже есть
-        sum = (first + second).also { first = second }
-        second = sum
+        second = (first + second).also { first = second }
         x++
     }
     return second
@@ -265,19 +263,33 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var otvet = x % (2 * PI)
-    var symbol = 1
-    var mn = 2
-    var x1 = 1.0
+    val n = x % (2 * PI)
+    var i = 1
+    val result = 1.0
+    var new: Double
     if (x % PI == PI / 2) return 0.0
     return if ((x / PI) % 2 == 0.0) 1.0 else -1.0
-    while (abs(x1) > eps) {
-        symbol = -symbol // смена знака (с + на -)
-        x1 = symbol * (x % (2 * PI)).pow(mn) / factorial(mn) // формула
-        mn += 2 // по формуле увеличиваем множитель
-        otvet += x1
+    while (true) {
+        new = n.pow(i * 2) / factorial(i * 2)
+        if (new < eps) return result
+        i++
     }
-    return otvet
+    return result
+
+    //    if (n < 0) n += oneCircle
+    //    var result = 1.0
+    //    var i = 1
+    //    var elemNow: Double
+    //    while (true) {
+    //        elemNow = n.pow(i * 2) / factorial(i * 2)
+    //        if (i % 2 == 0) {
+    //            result += elemNow
+    //        } else {
+    //            result -= elemNow
+    //        }
+    //        if (elemNow < eps) return result
+    //        i++
+    //    }
 }
 
 /**

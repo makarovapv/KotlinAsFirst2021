@@ -2,6 +2,10 @@
 
 package lesson5.task1
 
+import lesson1.task1.seconds
+import lesson4.task1.mean
+import kotlin.math.roundToInt
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -96,7 +100,19 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    var result = mapOf<Int, List<String>>() // оценка и имя
+    for ((name, mark) in grades) {
+        if (mark in result) { // если оценка уже есть в результате
+            var liststud = result[mark] // то liststud = всему имеющемуся списку имен, у которых нужная оценка
+            liststud = liststud!! + name // добавляем к имеющимся именам новое, !! тк прошлые имена не уходят
+            result = result + Pair(mark, liststud) // результат прошлых оценок (если был) + пара (оценка, имена)
+        } else // если нет
+            result = result + Pair(mark, listOf(name))
+        // то к результату присваиваем новую пару (оценка, список (лежит имя))
+    }
+    return result
+}
 
 /**
  * Простая (2 балла)
@@ -108,7 +124,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    for (k in a.keys) if (a[k] != b[k] || !b.containsKey(k)) return false
+    // если (ключ а != ключу б) или (ключа нет в наличии) -> -
+    return true
+}
 
 /**
  * Простая (2 балла)
@@ -125,7 +145,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+    // нужно удалить из a всё, что встречается в b
+    for ((k, v) in b) if (a[k] == v) a.remove(k)
 }
 
 /**
@@ -135,7 +156,12 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b).toList() // пересечение множеств
+//{
+//    val a1 = a.union(b).toMutableList() // закидываем всё в один список
+//    for (i in a1 + 1) if ((i in a && i !in b) || (i in b && i !in a)) a1.remove(i) // удаляем
+//    return a1
+//}
 
 /**
  * Средняя (3 балла)
@@ -154,7 +180,17 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    var result = mapA // положим готовый map
+    for ((title, number) in mapB) {
+        if (title in result && result[title] != number) { // если заголовок уже есть и у него какое-то другое значение
+            var num = result[title] // новое значение для ключа
+            num = num!! + ", $number" // "112, 911", где 112 = num!!, а 911 $number
+            result = result + Pair(title, num) // к старому резу прибавляем измененное значение для 'Emergency'
+        } else result = result + Pair(title, number) // к старому резу прибавляем новую пару ключ + знач
+    }
+    return result
+}
 
 /**
  * Средняя (4 балла)
@@ -167,6 +203,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+
 
 /**
  * Средняя (4 балла)

@@ -164,28 +164,14 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     // прямоугольный: a^2 + b^2 = c^2
     // остроугольный: a^2 + b^2 > c^2
     // тупоугольный: a^2 + b^2 < c^2
-    if ((a + b < c) || (a + c < b) || (b + c < a))
-        return -1
-    val maxsum: Double
-    val maxelement: Double
-    if (a > c && a > b) {
-        maxsum = b.pow(2) + c.pow(2)
-        maxelement = a.pow(2)
-    }
-    else if (b > c && b > a) {
-        maxsum = a.pow(2) + c.pow(2)
-        maxelement = b.pow(2)
-    }
-    else {
-        maxsum = a.pow(2) + b.pow(2)
-        maxelement = c.pow(2)
-    }
-    if (maxsum > maxelement)
-        return 0
-    else if (maxsum == maxelement)
-        return 1
-    else
-        return 2
+    val maxSide = maxOf(a, b, c)
+    val minSide = minOf(a, b, c)
+    val midSide = a + b + c - minSide - maxSide
+    return if (minSide + midSide > maxSide) {
+        if (midSide.pow(2) + minSide.pow(2) == maxSide.pow(2)) 1
+        else if (midSide.pow(2) + minSide.pow(2) > maxSide.pow(2)) 0
+        else 2
+    } else -1
 }
 
 /**
@@ -194,12 +180,6 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Даны четыре точки на одной прямой: A, B, C и D.
  * Координаты точек a, b, c, d соответственно, b >= a, d >= c.
  * Найти длину пересечения отрезков AB и CD.
- * Если пересечения нет , вернуть -1.
+ * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = when {
-    (c > b || a > d) -> -1
-    (a <= c && c <= d && d <= b) -> d - c // A C D B
-    (a <= c && c <= b && b <= d) -> b - c // A C B D
-    (c <= a && b <= d) -> b - a // C A B D
-    else -> d - a // A(C) B(D)
-}
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = if (maxOf(a, c) > minOf(b, d)) -1 else minOf(b, d) - maxOf(a, c)

@@ -6,6 +6,8 @@ import lesson1.task1.discriminant
 import kotlin.math.sqrt
 import kotlin.math.pow
 
+import kotlin.text.StringBuilder as StringBuilder1
+
 // Урок 4: списки
 // Максимальное количество баллов = 12
 // Рекомендуемое количество баллов = 8
@@ -140,7 +142,8 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sumOf {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val summa = list.sum()
-    for (i in 0 until list.size) list[i] = list[i] - summa / list.count()
+    val k = list.count()
+    for (i in 0 until list.size) list[i] = list[i] - summa / k
     return list
 }
 
@@ -242,14 +245,13 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    var otvet = ""
-    val a = 'a'
+    val result = StringBuilder()
     val list = convert(n, base).toMutableList()
     for (i in 0 until list.size) {
-        if (list[i] >= 10) otvet += a + (list[i] - 10)
-        else otvet += list[i].toString()
+        if (list[i] >= 10) result.append('a' + list[i] - 10)
+        else result.append(list[i].toString())
     }
-    return otvet
+    return result.toString()
 }
 
 /**
