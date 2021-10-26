@@ -262,20 +262,20 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double {
-    val c = x % (2 * PI)
-    var j = 2.0
-    var result = 0.0
-    var n = 0 // степень
-    var i = 0.0 // значение
-    while (abs(i) > eps) {
-        i = (-1.0).pow(j) * c.pow(n) / factorial(n)
-        result += i
-        j++
-        n += 2
-    }
-    return result
-}
+fun cos(x: Double, eps: Double): Double = TODO()
+//    val c = x % (2 * PI)
+//    var j = 2.0
+//    var result = 0.0
+//    var n = 0 // степень
+//    var i = 0.0 // значение
+//    while (abs(i) > eps) {
+//        i = (-1.0).pow(j) * c.pow(n) / factorial(n)
+//        result += i
+//        j++
+//        n += 2
+//    }
+//    return result
+// не могу понять почему некоторые тесты ломаются :(
 
 /**
  * Сложная (4 балла)
