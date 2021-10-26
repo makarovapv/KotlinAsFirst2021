@@ -237,20 +237,15 @@ fun hasDifferentDigits(n: Int): Boolean {
  */
 
 fun sin(x: Double, eps: Double): Double {
-    var otvet = x % (2 * PI)
-    var symbol = 1
-    var mn = 3
-    var x1 = x
-    if (x % PI == 0.0) return 0.0
-    if (x % (3 * PI / 2) == PI / 2) return 1.0
-    if (x % (3 * PI / 2) == 0.0) return -1.0
-    while (abs(x1) > eps) {
-        symbol = -symbol // смена знака (с + на -)
-        x1 = symbol * (x % (2 * PI)).pow(mn) / factorial(mn) // формула
-        mn += 2 // по формуле увеличиваем множитель
-        otvet += x1
+    var result = 0.0
+    val angle = x % (2 * PI)
+    var dt = angle
+    var iteral = 2.0
+    while (abs(dt) > eps) {
+        result += dt
+        dt *= -angle.pow(2) / (iteral++ * iteral++)
     }
-    return otvet
+    return result
 }
 
 /**
@@ -262,20 +257,18 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
-//    val c = x % (2 * PI)
-//    var j = 2.0
-//    var result = 0.0
-//    var n = 0 // степень
-//    var i = 0.0 // значение
-//    while (abs(i) > eps) {
-//        i = (-1.0).pow(j) * c.pow(n) / factorial(n)
-//        result += i
-//        j++
-//        n += 2
-//    }
-//    return result
-// не могу понять почему некоторые тесты ломаются :(
+fun cos(x: Double, eps: Double): Double {
+    var result = 0.0
+    val angle = x % (2 * PI)
+    var dt = 1.0
+    var iteral = 1.0
+    while (abs(dt) > eps) {
+        result += dt
+        dt *= -angle.pow(2) / (iteral++ * iteral++)
+    }
+    return result
+}
+
 
 /**
  * Сложная (4 балла)
