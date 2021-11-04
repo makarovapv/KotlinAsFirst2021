@@ -239,9 +239,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val alpword = mutableSetOf<Char>()
     val alpchars = mutableSetOf<Char>()
-    if (word.isEmpty() || chars.isEmpty()) return false
-    for (i in word) alpword.add(i.lowercaseChar())
-    for (i in chars) alpchars.add(i.lowercaseChar())
+    if (word.isEmpty() || chars.isNullOrEmpty()) return false
+    for (i in word) alpword += i.lowercaseChar()
+    for (i in chars) alpchars += i.lowercaseChar()
     for (i in alpword) if (i !in alpchars) return false
     return true
 }
