@@ -141,9 +141,8 @@ fun mean(list: List<Double>): Double = if (list.isEmpty()) 0.0 else list.sumOf {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val summa = list.sum()
-    val k = list.count()
-    for (i in 0 until list.size) list[i] = list[i] - summa / k
+    val mean = mean(list)
+    for (num in 0 until list.size) list[num] -= mean
     return list
 }
 
@@ -193,13 +192,13 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  */
 fun factorize(n: Int): List<Int> {
     var n1 = n
-    var delitel = 2
+    var divisor = 2
     val list = mutableListOf<Int>()
     while (n1 > 1) {
-        if (n1 % delitel == 0) {
-            n1 /= delitel
-            list.add(delitel)
-        } else delitel++
+        if (n1 % divisor == 0) {
+            n1 /= divisor
+            list.add(divisor)
+        } else divisor++
     }
     return list
 }
@@ -244,15 +243,20 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String {
-    val result = StringBuilder()
-    val list = convert(n, base).toMutableList()
-    for (i in 0 until list.size) {
-        if (list[i] >= 10) result.append('a' + list[i] - 10)
-        else result.append(list[i].toString())
+fun convertToString(n: Int, base: Int): String =
+    convert(n, base).joinToString(separator = "") {
+        if (it >= 10) ('a' + it - 10).toString()
+        else it.toString()
     }
-    return result.toString()
-}
+
+//    val result = StringBuilder()
+//    val list = convert(n, base).toMutableList()
+//    for (i in 0 until list.size) {
+//        if (list[i] >= 10) result.append('a' + list[i] - 10)
+//        else result.append(list[i].toString())
+//    }
+//    return result.toString()
+
 
 /**
  * Средняя (3 балла)

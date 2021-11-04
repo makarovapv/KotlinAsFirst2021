@@ -283,18 +283,18 @@ fun cos(x: Double, eps: Double): Double {
 fun squareSequenceDigit(n: Int): Int {
     var count = 0
     var kv: Int
-    var otvet = 0
+    var result = 0
     while (count < n) {
         for (i in 1..n) {
             kv = sqr(i)
             count += digitNumber(kv) //
             if (count >= n) {
-                otvet = (kv / 10.0.pow(count - n) % 10).toInt()
+                result = (kv / 10.0.pow(count - n) % 10).toInt()
                 break
             }
         }
     }
-    return otvet
+    return result
 }
 
 /**
@@ -309,16 +309,16 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var count = 0
     var f: Int
-    var otvet = 0
+    var result = 0
     while (count < n) {
         for (i in 1..n) {
             f = fib(i)
             count += digitNumber(f) //
             if (count >= n) {
-                otvet = (f / 10.0.pow(count - n) % 10).toInt()
+                result = (f / 10.0.pow(count - n) % 10).toInt()
                 break
             }
         }
     }
-    return otvet
+    return result
 }
