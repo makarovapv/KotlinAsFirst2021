@@ -184,8 +184,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         if (title in result && result[title] != number) { // если заголовок уже есть и у него какое-то другое значение
             var num = result[title] // новое значение для ключа
             num = num!! + ", $number" // "112, 911", где 112 = num!!, а 911 $number
-            result.putAll(result + Pair(title, num)) // к старому резу прибавляем измененное значение для 'Emergency'
-        } else result.putAll(result + Pair(title, number)) // к старому резу прибавляем новую пару ключ + знач
+            result[title] = num // к старому резу прибавляем измененное значение для 'Emergency'
+        } else result[title] = number // к старому резу прибавляем новую пару ключ + знач
     }
     return result
 }
@@ -239,7 +239,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val alpword = mutableSetOf<Char>()
     val alpchars = mutableSetOf<Char>()
-    if (word.isEmpty() || chars.isNullOrEmpty()) return false
+    if (word.isEmpty()) return true
     for (i in word) alpword += i.lowercaseChar()
     for (i in chars) alpchars += i.lowercaseChar()
     for (i in alpword) if (i !in alpchars) return false
@@ -260,14 +260,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  */
 // a : 1 + 1
 // b : 1
-fun extractRepeats(list: List<String>): Map<String, Int> {
-    val result = mutableMapOf<String, Int>()
-    for (alp in list) {
-        if (alp !in result) result[alp] = 1
-        else result[alp] = result.getOrDefault(alp, 1) + 1
-    }
-    return result.toMap().filterValues { it > 1 }
-}
+fun extractRepeats(list: List<String>): Map<String, Int> =
+    (list.groupingBy { it }.eachCount()).filterValues { it > 1 }
+// группируем по букве и ее кол-ву (a = 2) -> выводим если результат больше 1
+
 
 /**
  * Средняя (3 балла)
@@ -345,11 +341,20 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in list.indices) if ((i != list.indexOf(number - list[i]) && (number - list[i] in list)))
-    //если (индекс != индексу полученного числа) и (число - текущее в списке)
-        return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
-    return Pair(-1, -1)
+//    for (i in list.indices) if ((i != list.indexOf(number - list[i]) && (number - list[i] in list)))
+//    //если (индекс != индексу полученного числа) и (число - текущее в списке)
+//        return Pair(minOf(i, list.indexOf(number - list[i])), maxOf(i, list.indexOf(number - list[i])))
+//    return Pair(-1, -1)
+    var result = Pair(-1, -1)
+    val map = mutableMapOf<Int, Int>()
+    list.forEachIndexed { ind, i ->
+        val j = number - list[ind]
+        if (j !in map.keys) map[i] = ind else result = Pair(map[j]!!, ind)
+        println(map)
+    }
+    return result
 }
+
 
 /**
  * Очень сложная (8 баллов)

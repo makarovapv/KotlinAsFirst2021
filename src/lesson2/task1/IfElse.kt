@@ -162,20 +162,13 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (a + b < c || a + c < b || b + c < a) return -1
+    // условия несущ.
     val max = maxOf(a, b, c)
     val min = minOf(a, b, c)
-//    val k1 = 2 * max - a - b - c < 0
-    val k1 = min + (a + b + c - min - max) > max
-    // min + mid > max - правило существования
-    // решила понятнее для себя расписать
-    val k2 = sqr(min) + sqr(a + b + c - min - max) - sqr(max)
-    // прямоугольный: a^2 + b^2 = c^2
-    // остроугольный: a^2 + b^2 > c^2
-    // тупоугольный: a^2 + b^2 < c^2
     return when {
-        !k1 -> -1
-        k2 == 0.0 -> 1
-        k2 > 0 -> 2
+        sqr(max) > sqr(min) + sqr(a + b + c - min - max) -> 2
+        sqr(max) == sqr(min) + sqr(a + b + c - min - max) -> 1
         else -> 0
     }
 }
