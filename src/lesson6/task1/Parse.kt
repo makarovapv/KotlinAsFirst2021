@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +76,34 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+
+fun dateStrToDigit(str: String): String {
+    try {
+        val line = str.split(" ")
+        if (str.split(" ").size != 3) return ""
+        val monthtonum = when (line[1]) {
+            "января" -> "01"
+            "февраля" -> "02"
+            "марта" -> "03"
+            "апреля" -> "04"
+            "мая" -> "05"
+            "июня" -> "06"
+            "июля" -> "07"
+            "августа" -> "08"
+            "сентября" -> "09"
+            "октября" -> "10"
+            "ноября" -> "11"
+            "декабря" -> "12"
+            else -> return ""
+        }
+        var (day, month, year) = line
+        if (day.toInt() in 1..9) day = "0$day"
+        return if (day.toInt() <= daysInMonth(monthtonum.toInt(), year.toInt())) "$day.$monthtonum.$year" else ""
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
+
 
 /**
  * Средняя (4 балла)
@@ -86,7 +115,61 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+
+fun dateDigitToStr(digital: String): String {
+    try {
+        val line = digital.split(".")
+        if (digital.split(".").size != 3) return ""
+        val monthtostr = when (line[1]) {
+            "01" -> "января"
+            "02" -> "февраля"
+            "03" -> "марта"
+            "04" -> "апреля"
+            "05" -> "мая"
+            "06" -> "июня"
+            "07" -> "июля"
+            "08" -> "августа"
+            "09" -> "сентября"
+            "10" -> "октября"
+            "11" -> "ноября"
+            "12" -> "января"
+            else -> return ""
+        }
+        val (day, month, year) = line
+        return if (day.toInt() <= daysInMonth(month.toInt(), year.toInt())) "${day.toInt()} $monthtostr $year" else ""
+    } catch (e: NumberFormatException) {
+        return ""
+    }
+}
+
+//    if (!Regex("""\d{1,2} \d{1,2} \d+""").matches(digital)) return ""
+//    if (digital.split(".").size != 3 || digital.split(".")[1].toInt() !in 1..12) return ""
+//    if (!Regex("""\d{1,2} \d{1,2} \d+""").matches(digital)) return ""
+//    else try {
+//        val (day, month, year) = digital.split(".")
+//        val monthtostr = when (month) {
+//            "01" -> "января"
+//            "02" -> "февраля"
+//            "03" -> "марта"
+//            "04" -> "апреля"
+//            "05" -> "мая"
+//            "06" -> "июня"
+//            "07" -> "июля"
+//            "08" -> "августа"
+//            "09" -> "сентября"
+//            "10" -> "октября"
+//            "11" -> "ноября"
+//            "12" -> "января"
+//            else -> return ""
+//        }
+//        val daytostr = daysInMonth(month.toInt(), year.toInt())
+//        return if (day.toInt() in 1..daytostr) {
+//            "${day.toInt()} $monthtostr $year"
+//        } else ""
+//    } catch (e: NumberFormatException) {
+//        return ""
+//    }
+//}
 
 /**
  * Средняя (4 балла)
