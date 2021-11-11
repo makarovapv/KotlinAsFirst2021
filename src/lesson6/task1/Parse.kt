@@ -97,7 +97,7 @@ fun dateStrToDigit(str: String): String {
             else -> return ""
         }
         var (day, month, year) = line
-        if (day.toInt() in 1..9) day = "0$day"
+        if (day.toInt() in 1..9 && "0" !in day) day = "0$day"
         return if (day.toInt() <= daysInMonth(monthtonum.toInt(), year.toInt())) "$day.$monthtonum.$year" else ""
     } catch (e: NumberFormatException) {
         return ""
@@ -132,7 +132,7 @@ fun dateDigitToStr(digital: String): String {
             "09" -> "сентября"
             "10" -> "октября"
             "11" -> "ноября"
-            "12" -> "января"
+            "12" -> "декабря"
             else -> return ""
         }
         val (day, month, year) = line
