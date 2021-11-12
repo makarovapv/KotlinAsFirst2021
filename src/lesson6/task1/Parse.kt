@@ -142,35 +142,6 @@ fun dateDigitToStr(digital: String): String {
     }
 }
 
-//    if (!Regex("""\d{1,2} \d{1,2} \d+""").matches(digital)) return ""
-//    if (digital.split(".").size != 3 || digital.split(".")[1].toInt() !in 1..12) return ""
-//    if (!Regex("""\d{1,2} \d{1,2} \d+""").matches(digital)) return ""
-//    else try {
-//        val (day, month, year) = digital.split(".")
-//        val monthtostr = when (month) {
-//            "01" -> "января"
-//            "02" -> "февраля"
-//            "03" -> "марта"
-//            "04" -> "апреля"
-//            "05" -> "мая"
-//            "06" -> "июня"
-//            "07" -> "июля"
-//            "08" -> "августа"
-//            "09" -> "сентября"
-//            "10" -> "октября"
-//            "11" -> "ноября"
-//            "12" -> "января"
-//            else -> return ""
-//        }
-//        val daytostr = daysInMonth(month.toInt(), year.toInt())
-//        return if (day.toInt() in 1..daytostr) {
-//            "${day.toInt()} $monthtostr $year"
-//        } else ""
-//    } catch (e: NumberFormatException) {
-//        return ""
-//    }
-//}
-
 /**
  * Средняя (4 балла)
  *
@@ -185,7 +156,8 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String =
+    if (!Regex("""(\+?\s*\d[-\d\s]*(\([-\d\s]+\)[-\d\s]+)?)""").matches(phone)) "" else phone.filter { it !in "() -" }
 
 /**
  * Средняя (5 баллов)
@@ -197,7 +169,13 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (jumps.contains(Regex("""[^\d\s-%]"""))) return -1
+    val i = Regex("""[-%\s]""").split(jumps)
+    var max = -1
+    for (j in i) if ((j.isNotEmpty()) && (j.toInt() > max)) max = j.toInt()
+    return max
+}
 
 /**
  * Сложная (6 баллов)
@@ -221,7 +199,24 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (expression.contains(Regex("""[^\d\s+-]"""))) throw IllegalArgumentException()
+    var result = 0
+    val line = expression.split(" ")// 2+31-40+13
+    var mark = 1 // знак (- или +)
+    for (i in line) {
+        if (line.indexOf(i) % 2 == 0) {
+            require(i.all { it in '0'..'9' }) // require выбрасывает исключение IllegalArgumentException,
+            // если значение равно false.
+            result += mark * i.toInt()
+        } else mark = when (i) {
+            "-" -> -1
+            "+" -> 1
+            else -> throw IllegalArgumentException()
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
