@@ -199,11 +199,13 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
+
 fun plusMinus(expression: String): Int {
     if (expression.contains(Regex("""[^\d\s+-]"""))) throw IllegalArgumentException()
     var result = 0
     val line = expression.split(" ")// 2+31-40+13
     var mark = 1 // знак (- или +)
+
     for (i in line) {
         if (line.indexOf(i) % 2 == 0) {
             require(i.all { it in '0'..'9' }) // require выбрасывает исключение IllegalArgumentException,
@@ -240,7 +242,23 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
+fun mostExpensive(description: String): String {
+    val list = "$description; "
+    if (!list.matches(Regex("""([^\s]+\s\d+(\.\d+)?;\s)+"""))) return ""
+    val newlist = description.split("; ")
+    var maxprice = 0.0
+    var maxname = ""
+    for (i in newlist) {
+        val foodandprice = i.split(" ")
+        val food = foodandprice[0]
+        val price = foodandprice[1].toDouble()
+        if (price > maxprice) {
+            maxprice = price
+            maxname = food
+        }
+    }
+    return maxname
+}
 
 /**
  * Сложная (6 баллов)
