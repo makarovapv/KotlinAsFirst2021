@@ -245,14 +245,16 @@ fun firstDuplicateIndex(str: String): Int = TODO()
 fun mostExpensive(description: String): String {
     val list = "$description; "
     if (!list.matches(Regex("""([^\s]+\s\d+(\.\d+)?;\s)+"""))) return ""
+    if (description.isEmpty()) return ""
     val newlist = description.split("; ")
     var maxprice = 0.0
     var maxname = ""
     for (i in newlist) {
         val foodandprice = i.split(" ")
+        if (foodandprice[1].contains(Regex("""[^\d.]"""))) return ""
         val food = foodandprice[0]
         val price = foodandprice[1].toDouble()
-        if (price > maxprice) {
+        if (price >= maxprice) {
             maxprice = price
             maxname = food
         }
