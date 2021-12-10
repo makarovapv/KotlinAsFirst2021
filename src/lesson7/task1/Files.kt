@@ -64,16 +64,16 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Подчёркивание в середине и/или в конце строк значения не имеет.
  */
 fun deleteMarked(inputName: String, outputName: String) {
-    val writer = File(outputName).bufferedWriter()
-    for (line in File(inputName).readLines()) {
-        if (line.isEmpty()) writer.newLine() else {
-            if (line[0] == '_') continue else { // если в начале строки стоит _ то продолжаем
-                writer.write(line) // иначе вписываем строку
-                writer.newLine() // и создаем новую
+    File(outputName).bufferedWriter().use {
+        for (line in File(inputName).readLines()) {
+            if (line.isEmpty()) it.newLine() else {
+                if (line[0] == '_') continue else {
+                    it.write(line)
+                    it.newLine()
+                }
             }
         }
     }
-    writer.close() // закрываем файл и выводим
 }
 
 /**

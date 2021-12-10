@@ -2,6 +2,10 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.NullableMonad.filter
+import kotlin.collections.MutableMap as MutableMap1
+import kotlin.text.split as split1
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -37,7 +41,7 @@ fun shoppingListCost(
  * для которых телефон начинается с заданного кода страны `countryCode`
  */
 fun filterByCountryCode(
-    phoneBook: MutableMap<String, String>,
+    phoneBook: MutableMap1<String, String>,
     countryCode: String
 ) {
     val namesToRemove = mutableListOf<String>()
@@ -97,17 +101,21 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var result = mapOf<Int, List<String>>() // оценка и имя
-    for ((name, mark) in grades) {
-        if (mark in result) { // если оценка уже есть в результате
-            var liststud = result[mark] // то liststud = всему имеющемуся списку имен, у которых нужная оценка
-            liststud = liststud!! + name // добавляем к имеющимся именам новое, !! тк прошлые имена не уходят
-            result = result + Pair(mark, liststud) // результат прошлых оценок (если был) + пара (оценка, имена)
-        } else // если нет
-            result = result + Pair(mark, listOf(name))
-        // то к результату присваиваем новую пару (оценка, список (лежит имя))
-    }
-    return result
+    val list = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades) list.getOrPut(grade) { mutableListOf() }.add(name)
+    return list
+
+//    var result = mapOf<Int, List<String>>() // оценка и имя
+//    for ((name, mark) in grades) {
+//        if (mark in result) { // если оценка уже есть в результате
+//            var liststud = result[mark] // то liststud = всему имеющемуся списку имен, у которых нужная оценка
+//            liststud = liststud!! + name // добавляем к имеющимся именам новое, !! тк прошлые имена не уходят
+//            result = result + Pair(mark, liststud) // результат прошлых оценок (если был) + пара (оценка, имена)
+//        } else // если нет
+//            result = result + Pair(mark, listOf(name))
+//        // то к результату присваиваем новую пару (оценка, список (лежит имя))
+//    }
+//    return result
 }
 
 /**
@@ -120,7 +128,8 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all { a[it] == b[it] }
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all {a[it] == b[it]}
+
 //{
 //    for (k in a.keys) if (a[k] != b[k] || !b.containsKey(k)) return false
 //    // если (ключ а != ключу б) или (ключа нет в наличии) -> -
@@ -141,8 +150,7 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    // нужно удалить из a всё, что встречается в b
+fun subtractOf(a: MutableMap1<String, String>, b: Map<String, String>) {
     for ((key, value) in b) if (a[key] == value) a.remove(key)
 }
 
@@ -180,12 +188,12 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = ((a.toSet()).
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val result = mutableMapOf<String, String>()
     result.putAll(mapA)
-    for ((title, number) in mapB) {
-        if (title in result && result[title] != number) { // если заголовок уже есть и у него какое-то другое значение
-            var num = result[title] // новое значение для ключа
-            num = num!! + ", $number" // "112, 911", где 112 = num!!, а 911 $number
-            result[title] = num // к старому резу прибавляем измененное значение для 'Emergency'
-        } else result[title] = number // к старому резу прибавляем новую пару ключ + знач
+    for ((name, number) in mapB) {
+        if (name in result && result[name] != number) {
+            var num = result[name]
+            num = num!! + ", $number"
+            result[name] = num
+        } else result[name] = number
     }
     return result
 }
@@ -202,7 +210,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
     stockPrices.groupBy { it.first }.mapValues { it: Map.Entry<String, List<Pair<String, Double>>> ->
-        val size = it.value.size                     // строка
+        val size = it.value.size
         val sum = it.value.sumOf { it.second }
         sum / size
     }
@@ -224,8 +232,6 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  */
 fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? =
     stuff.filterValues { kind == it.first }.minByOrNull { it.value.second }?.key
-// kind = тип продукта; выбираем минимальную (если есть) цену и возвращаем название продукта
-
 
 /**
  * Средняя (3 балла)
@@ -237,13 +243,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val alpword = mutableSetOf<Char>()
-    val alpchars = mutableSetOf<Char>()
-    if (word.isEmpty()) return true
-    for (i in word) alpword += i.lowercaseChar()
-    for (i in chars) alpchars += i.lowercaseChar()
-    for (i in alpword) if (i !in alpchars) return false
+    val w = word.lowercase().toSet().joinToString("")
+    if (w.isEmpty()) return true
+    if (w.isNotEmpty() && chars.isEmpty()) return false
+    for (ch in w) if (ch !in chars) return false
     return true
+
 }
 
 /**
@@ -262,7 +267,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 // b : 1
 fun extractRepeats(list: List<String>): Map<String, Int> =
     (list.groupingBy { it }.eachCount()).filterValues { it > 1 }
-// группируем по букве и ее кол-ву (a = 2) -> выводим если результат больше 1
+
 
 
 /**
@@ -281,7 +286,6 @@ fun hasAnagrams(words: List<String>): Boolean {
     var k = 1
     for (word in words) {
         for (i in k until words.size) if (word.toList().sorted() == words[i].toList().sorted()) return true
-        // одно слово с другими
         k++
     }
     return false
@@ -378,25 +382,17 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *   ) -> emptySet()
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val result = mutableSetOf<String>()
-    var сpt = capacity // вместимость
-    val size = treasures.size // количество
-    val bagpack = Array(size + 1) { IntArray(сpt + 1) }
-    //массив промежуточных состояний рюкзака
-    val name = treasures.keys.toMutableList() // название
-    val about = treasures.values.toMutableList() // данные
-    if (treasures.isEmpty() || сpt == 0) return setOf() // если все пусто - вернуть пустоту
-    about.forEachIndexed { name, (weight, price) -> // для каждого индекса установить вес и цену
-        for (i in 1..сpt) { // от 1 до всей вместимости
-            bagpack[name + 1][i] = if (i >= weight) bagpack[name][i].coerceAtLeast(bagpack[name][i - weight] + price)
-            else bagpack[name][i]
+    val myBag = mutableMapOf<Int, Pair<Set<String>, Int>>()
+    myBag[0] = Pair(setOf(), 0)
+    for ((name, numbers) in treasures) {
+        val storage = mutableMapOf<Int, Pair<Set<String>, Int>>()
+        for ((weight, pair) in myBag) {
+            val newWeight = weight + numbers.first
+            if (newWeight <= capacity)
+                if (!storage.contains(newWeight) || myBag[newWeight]!!.second < pair.second + numbers.second)
+                    storage[newWeight] = Pair(pair.first + name, pair.second + numbers.second)
         }
+        for ((weight, pair) in storage) myBag[weight] = pair
     }
-    for (i in size downTo 1) {
-        if (bagpack[i - 1][сpt] != bagpack[i][сpt]) {
-            сpt -= about[i - 1].first // вычитаем занятый вес
-            result += (name[i - 1])
-        }
-    }
-    return result
+    return myBag.maxByOrNull { it.value.second }!!.value.first
 }

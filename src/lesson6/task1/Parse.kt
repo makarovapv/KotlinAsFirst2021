@@ -3,6 +3,7 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
+import java.lang.Exception
 
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
@@ -188,7 +189,15 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (jumps.contains(Regex("""[^-%\d+\s]""")) || jumps.isEmpty()) return -1
+    val i = jumps.split(" ")
+    var max = -1
+    for (j in i.indices step 2) {
+        if ("+" in i[j + 1] && i[j].toInt() > max) max = i[j].toInt()
+    }
+    return max
+}
 
 /**
  * Сложная (6 баллов)
