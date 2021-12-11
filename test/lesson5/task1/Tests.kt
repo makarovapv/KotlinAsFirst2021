@@ -242,6 +242,7 @@ class Tests {
         assertTrue(canBuildFrom(listOf('m', 'r', 'a', 't'), "Marat"))
         assertTrue(canBuildFrom(listOf(), ""))
         assertFalse(canBuildFrom(listOf(), "Hi"))
+        assertTrue(canBuildFrom(listOf('D'), "D"))
     }
 
     @Test
@@ -264,7 +265,7 @@ class Tests {
     @Test
     @Tag("3")
     fun hasAnagrams() {
-//        assertFalse(hasAnagrams(emptyList()))
+        assertFalse(hasAnagrams(emptyList()))
         assertTrue(hasAnagrams(listOf("рот", "свет", "тор")))
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
         assertFalse(hasAnagrams(listOf("поле", "полено")))
@@ -347,6 +348,12 @@ class Tests {
             bagPacking(
                 mapOf("Кубок" to (500 to 2000), "Слиток" to (1000 to 5000), "Корона" to (1000 to 10000)),
                 1000
+            )
+        )
+        assertEquals(
+            setOf<String>("A"),
+            bagPacking(
+                mapOf("A" to (1 to 2), "B" to (1 to 1), "C" to (1 to 1)), 1
             )
         )
     }

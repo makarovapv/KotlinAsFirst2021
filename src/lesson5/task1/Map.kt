@@ -3,6 +3,8 @@
 package lesson5.task1
 
 import ru.spbstu.wheels.NullableMonad.filter
+import java.lang.Math.max
+import java.util.Collections.max
 import kotlin.collections.MutableMap as MutableMap1
 import kotlin.text.split as split1
 
@@ -128,7 +130,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all {a[it] == b[it]}
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = a.keys.all { a[it] == b[it] }
 
 //{
 //    for (k in a.keys) if (a[k] != b[k] || !b.containsKey(k)) return false
@@ -244,9 +246,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val w = word.lowercase().toSet().joinToString("")
+    val chrs = chars.toString().lowercase().toSet()
     if (w.isEmpty()) return true
     if (w.isNotEmpty() && chars.isEmpty()) return false
-    for (ch in w) if (ch !in chars) return false
+    for (ch in w) if (ch !in chrs) return false
     return true
 
 }
@@ -267,7 +270,6 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 // b : 1
 fun extractRepeats(list: List<String>): Map<String, Int> =
     (list.groupingBy { it }.eachCount()).filterValues { it > 1 }
-
 
 
 /**
@@ -388,11 +390,17 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         val storage = mutableMapOf<Int, Pair<Set<String>, Int>>()
         for ((weight, pair) in myBag) {
             val newWeight = weight + numbers.first
-            if (newWeight <= capacity)
-                if (!storage.contains(newWeight) || myBag[newWeight]!!.second < pair.second + numbers.second)
-                    storage[newWeight] = Pair(pair.first + name, pair.second + numbers.second)
+            val newCost = pair.second + numbers.second
+            val maxCost = kotlin.math.max(
+                storage[weight + numbers.first]?.second ?: -100,
+                myBag[weight + numbers.first]?.second ?: -100
+            )
+            if (newCost > maxCost && newWeight <= capacity) {
+                storage[newWeight] = Pair(pair.first + name, newCost)
+            }
         }
         for ((weight, pair) in storage) myBag[weight] = pair
     }
+    println(myBag)
     return myBag.maxByOrNull { it.value.second }!!.value.first
 }
