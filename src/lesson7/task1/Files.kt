@@ -320,7 +320,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    var text = File(inputName).readText()
+    var text = File(inputName).readText().replace("\n", "__NEWLINE__")
     File(outputName).bufferedWriter().use {
         it.write("<html><body>")
         val regex = mutableMapOf<String, Pair<String, String>>(
@@ -333,7 +333,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 "<${extra.first}>" + result.value.replace(extra.second, "") + "</${extra.first}>"
             }
         }
-        val textLines = text.split("\n")
+        val textLines = text.split("__NEWLINE__")
         var p = false
         textLines.forEachIndexed { index, text ->
             if (index != 0) {
