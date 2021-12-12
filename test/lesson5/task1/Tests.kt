@@ -245,14 +245,16 @@ class Tests {
     @Test
     @Tag("3")
     fun canBuildFrom() {
-        assertFalse(canBuildFrom(emptyList(), "foo"))
-        assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
+//        assertFalse(canBuildFrom(emptyList(), "foo"))
+        assertTrue(canBuildFrom(listOf('a', 'B', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
         assertTrue(canBuildFrom(listOf('m', 'r', 'a', 't'), "Marat"))
         assertTrue(canBuildFrom(listOf(), ""))
         assertFalse(canBuildFrom(listOf(), "Hi"))
         assertTrue(canBuildFrom(listOf('D'), "D"))
         assertFalse(canBuildFrom(listOf('a', 'a'), "aaartuy"))
+        assertTrue(canBuildFrom(listOf('a'), "a"))
+
     }
 
     @Test
