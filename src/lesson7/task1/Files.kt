@@ -337,14 +337,16 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         var p = false
         textLines.forEachIndexed { index, text ->
             if (index != 0) {
-                if (textLines[index - 1].isBlank()) {
+                if (textLines[index - 1].isBlank() && p) {
                     p = false
                     it.write("</p>")
                 }
             }
             if (!p) {
-                p = true
-                it.write("<p>")
+                if (text.isNotBlank()) {
+                    p = true
+                    it.write("<p>")
+                }
             }
             it.write(text)
         }
