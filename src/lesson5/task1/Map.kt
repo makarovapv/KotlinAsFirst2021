@@ -249,7 +249,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val chrs = chars.toString().lowercase().toSet()
     if (w.isEmpty()) return true
     if (w.isNotEmpty() && chars.isEmpty()) return false
-    for (ch in w) if (ch !in chrs) return false
+    for (ch in w) if (ch !in chrs && chrs.size != w.length) return false
     return true
 
 }
