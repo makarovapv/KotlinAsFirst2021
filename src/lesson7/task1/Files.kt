@@ -323,14 +323,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     var text = File(inputName).readText().replace("\n", "__NEWLINE__")
     File(outputName).bufferedWriter().use {
         it.write("<html><body>")
-        val regex = mutableMapOf<String, Pair<String, String>>(
+        val regex = mapOf(
             Pair("\\*\\*(.*?)\\*\\*", Pair("b", "**")),
             Pair("\\*(.*?)\\*", Pair("i", "*")),
             Pair("~~(.*?)~~", Pair("s", "~~"))
-        )
-        regex.forEach { (regex, extra) ->
-            text = Regex(regex).replace(text) { result ->
-                "<${extra.first}>" + result.value.replace(extra.second, "") + "</${extra.first}>"
+        ).forEach { (regex, extra) ->
+            text = Regex(regex).replace(text) { matchResult ->
+                "<${extra.first}>" + matchResult.value.replace(extra.second, "") + "</${extra.first}>"
             }
         }
         val textLines = text.split("__NEWLINE__")
