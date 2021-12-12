@@ -335,7 +335,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         }
         val textLines = text.split("__NEWLINE__")
         var p = false
-        if (text.isBlank()) it.write("<p></p>")
+        if (text.replace("__NEWLINE__", "\n").isBlank()) it.write("<p></p>")
         textLines.forEachIndexed { index, text ->
             if (index != 0) {
                 if (textLines[index - 1].isBlank() && p) {
