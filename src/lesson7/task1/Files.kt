@@ -87,12 +87,12 @@ fun deleteMarked(inputName: String, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val result = mutableMapOf<String, Int>()
-    val text = File(inputName).readText().lowercase(Locale.getDefault()) // считываем и игнорим регистр
+    val text = File(inputName).readText().lowercase() // считываем и игнорим регистр
     val subs = substrings.toSet().toList() // на случай, если повтор
     for (i in subs.indices) {
         if (!result.contains(subs[i])) result[subs[i]] = 0
         // если не содержится, то будет 0
-        for (j in text.indices) if (text.startsWith(subs[i].lowercase(Locale.getDefault()), j))
+        for (j in text.indices) if (text.startsWith(subs[i].lowercase(), j))
         // true если строка нач. с указанного префикса
             result[subs[i]] = result[subs[i]]!! + 1
     }
@@ -190,6 +190,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  */
 fun top20Words(inputName: String): Map<String, Int> = TODO()
 
+
 /**
  * Средняя (14 баллов)
  *
@@ -254,7 +255,23 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val result = mutableListOf<String>()
+    File(outputName).bufferedWriter().use {
+        val text = File(inputName).readLines()
+        var maxLength = 0
+        for (line in text) {
+            if (line.lowercase().length == line.lowercase().toSet().size) {
+                if (line.length == maxLength) result.add(line)
+                else if (line.length > maxLength) {
+                    maxLength = line.length
+                    result.clear()
+                    result.add(line)
+                }
+            }
+        }
+        for (line in result) if (line != result.last()) it.append(line, ", ")
+        else it.write(line)
+    }
 }
 
 /**
@@ -303,7 +320,36 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    var text = File(inputName).readText()
+    File(outputName).bufferedWriter().use {
+        it.write("<html><body>")
+        val regex = mutableMapOf<String, Pair<String, String>>(
+            Pair("\\*\\*(.*?)\\*\\*", Pair("b", "**")),
+            Pair("\\*(.*?)\\*", Pair("i", "*")),
+            Pair("~~(.*?)~~", Pair("s", "~~"))
+        )
+        regex.forEach { (regex, extra) ->
+            text = Regex(regex).replace(text) { result ->
+                "<${extra.first}>" + result.value.replace(extra.second, "") + "</${extra.first}>"
+            }
+        }
+        val textLines = text.split("\n")
+        var p = false
+        textLines.forEachIndexed { index, text ->
+            if (index != 0) {
+                if (textLines[index - 1].isBlank()) {
+                    p = false
+                    it.write("</p>")
+                }
+            }
+            if (!p) {
+                p = true
+                it.write("<p>")
+            }
+            it.write(text)
+        }
+        it.write((if (p) "</p>" else "") + "</body></html>")
+    }
 }
 
 /**
