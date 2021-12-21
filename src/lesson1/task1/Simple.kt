@@ -52,10 +52,10 @@ fun quadraticRootProduct(a: Double, b: Double, c: Double): Double {
 /**
  * Пример главной функции
  */
-fun main() {
-    val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
-    println("Root product: $x1x2")
-}
+//fun main() {
+//    val x1x2 = quadraticRootProduct(1.0, 13.0, 42.0)
+//    println("Root product: $x1x2")
+//}
 
 /**
  * Тривиальная (3 балла).
@@ -75,7 +75,8 @@ fun seconds(hours: Int, minutes: Int, seconds: Int) = hours * 3600 + minutes * 6
  * Определить длину того же отрезка в метрах (в данном случае 18.98).
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
-fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double = 4.445 * (sagenes * 48 + arshins * 16 + vershoks) / 100
+fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
+    4.445 * (sagenes * 48 + arshins * 16 + vershoks) / 100
 
 
 /**
