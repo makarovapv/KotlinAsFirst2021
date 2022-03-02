@@ -75,6 +75,7 @@ internal class PhoneBookTest {
         assertTrue(book.addPhone("Васильев Дмитрий", "+79217654321"))
         assertEquals("Васильев Дмитрий", book.humanByPhone("+79217654321"))
         assertEquals("Иванов Петр", book.humanByPhone("+78121234567"))
+        assertEquals(null, book.humanByPhone("+781212346667"))
         assertNull(book.humanByPhone("+78127654321"))
     }
 

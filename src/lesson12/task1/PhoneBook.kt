@@ -24,7 +24,13 @@ class PhoneBook {
      * и false, если человек с таким именем уже был в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun addHuman(name: String): Boolean = TODO()
+    val list = mutableListOf<String>()
+    fun addHuman(name: String): Boolean {
+        return if (name !in list) {
+            list.add(name)
+            true
+        } else false
+    }
 
     /**
      * Убрать человека.
@@ -32,7 +38,7 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun removeHuman(name: String): Boolean = TODO()
+    fun removeHuman(name: String): Boolean = name in list
 
     /**
      * Добавить номер телефона.
@@ -41,7 +47,18 @@ class PhoneBook {
      * либо у него уже был такой номер телефона,
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
-    fun addPhone(name: String, phone: String): Boolean = TODO()
+    private val map = mutableMapOf<String, String>()
+    private val listOfPhones = mutableListOf<String>()
+    fun addPhone(name: String, phone: String): Boolean {
+        map[phone] = name
+        if (name in list) {
+            return if (phone !in listOfPhones) {
+                listOfPhones.add(phone)
+                true
+            } else false
+        }
+        return false
+    }
 
     /**
      * Убрать номер телефона.
@@ -49,24 +66,50 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    fun removePhone(name: String, phone: String): Boolean = TODO()
+    private val deletePhones = mutableListOf<String>()
+    fun removePhone(name: String, phone: String): Boolean {
+        addPhone(name, phone)
+        if (phone in listOfPhones) {
+            if (phone in deletePhones) {
+                return false
+            } else {
+                deletePhones.add(phone)
+            }
+            return true
+        } else return false
+    }
 
     /**
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    fun phones(name: String): Set<String> = TODO()
+    val result = mutableListOf<String>()
+    fun phones(name: String): Set<String> {
+        map.forEach { (n) ->
+            if (map[n] == name) {
+                result.add(n)
+                println(result)
+            }
+        }
+        return result.toSet()
+    }
 
     /**
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = TODO()
+    fun humanByPhone(phone: String): String? = map[phone]
 
     /**
      * Две телефонные книги равны, если в них хранится одинаковый набор людей,
      * и каждому человеку соответствует одинаковый набор телефонов.
      * Порядок людей / порядок телефонов в книге не должен иметь значения.
      */
-    override fun equals(other: Any?): Boolean = TODO()
+    override fun equals(other: Any?): Boolean {
+        return if (other is PhoneBook) {
+            list.sorted() == other.list.sorted() && map.toSortedMap() == other.map.toSortedMap()
+        } else {
+            false
+        }
+    }
 }
