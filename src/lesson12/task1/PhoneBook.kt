@@ -66,8 +66,9 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    private val deletePhones = mutableListOf<String>()
+
     fun removePhone(name: String, phone: String): Boolean {
+        val deletePhones = mutableListOf<String>()
         addPhone(name, phone)
         if (phone in listOfPhones) {
             if (phone in deletePhones) {
@@ -83,8 +84,9 @@ class PhoneBook {
      * Вернуть все номера телефона заданного человека.
      * Если этого человека нет в книге, вернуть пустой список
      */
-    val result = mutableListOf<String>()
+
     fun phones(name: String): Set<String> {
+        val result = mutableListOf<String>()
         map.forEach { (n) ->
             if (map[n] == name) {
                 result.add(n)
@@ -111,5 +113,12 @@ class PhoneBook {
         } else {
             false
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = list.hashCode()
+        result = 31 * result + map.hashCode()
+        result = 31 * result + listOfPhones.hashCode()
+        return result
     }
 }
