@@ -29,6 +29,9 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
      */
 
     fun coeff(i: Int): Double {
+        if (coeffList.isEmpty()) {
+            return 0.0
+        }
         if (i >= coeffList.size) {
             throw IllegalArgumentException()
         }
@@ -163,12 +166,12 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
      * Если A / B = C и A % B = D, то A = B * C + D и степень D меньше степени B
      */
 
-    private fun divison(other: Polynom, rem: Boolean? = false): Polynom {
+    operator fun div(other: Polynom): Polynom {
         var cf = coeffList.reversed().dropWhile { it == 0.0 }.toMutableList()// (1.0, -2.0, -1.0, 4.0)
         val ocf = other.coeffList.reversed().dropWhile { it == 0.0 }.toMutableList() // (1.0, 3.0, 2.0)
         var result = doubleArrayOf()
         val cfSize = cf.size
-        var archivePolynom = DoubleArray(ocf.size) // для изменений p1
+        val archivePolynom = DoubleArray(ocf.size) // для изменений p1
 //        val set = mutableSetOf<Double>()
 //        cf.forEach { num ->
 //            if (num != 1.0 || num != 0.0) {
@@ -230,18 +233,13 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
 //                }
             }
         }
-        if (rem == true) {
-            return Polynom(*cf.toDoubleArray())
-        }
         return Polynom(*result) // целого - нет
     }
-
-    operator fun div(other: Polynom): Polynom = divison(other, false)
 
     /**
      * Взятие остатка
      */
-    operator fun rem(other: Polynom): Polynom = divison(other, true)
+    operator fun rem(other: Polynom): Polynom = this - this / other * other
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

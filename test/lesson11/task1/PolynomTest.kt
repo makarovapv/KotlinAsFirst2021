@@ -87,6 +87,8 @@ class PolynomTest {
             Polynom(2.0, -1.0, 7.0, 0.0, -1.0) / Polynom(1.0, 0.0, -25.0),
             1e-10)
         assertApproxEquals(Polynom(1.0, 2.0), Polynom(2.0, 4.0) / Polynom(0.0, 2.0), 1e-10)
+        assertApproxEquals(Polynom(1.0), Polynom(4.0, 2.0) / Polynom(4.0, 2.0), 1e-10)
+
     }
 
     @Test
@@ -98,6 +100,7 @@ class PolynomTest {
         val q = Polynom(12.0, 14.0)
         assertApproxEquals(q, p1 % p2, 1e-10)
         assertApproxEquals(p1, p2 * r + q, 1e-10)
+        assertApproxEquals(Polynom(0.0), Polynom(4.0, 2.0) % Polynom(4.0, 2.0), 1e-10)
     }
 
     @Test

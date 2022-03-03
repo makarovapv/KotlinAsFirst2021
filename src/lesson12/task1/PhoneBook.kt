@@ -18,13 +18,16 @@ package lesson12.task1
  * Класс должен иметь конструктор по умолчанию (без параметров).
  */
 class PhoneBook {
+    val list = mutableListOf<String>()
+    private var map = mutableMapOf<String, String>()
+    private var listOfPhones = mutableListOf<String>()
+
     /**
      * Добавить человека.
      * Возвращает true, если человек был успешно добавлен,
      * и false, если человек с таким именем уже был в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    val list = mutableListOf<String>()
     fun addHuman(name: String): Boolean {
         return if (name !in list) {
             list.add(name)
@@ -38,7 +41,12 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun removeHuman(name: String): Boolean = name in list
+    fun removeHuman(name: String): Boolean {
+        return if (name in list) {
+            list.remove(name)
+            true
+        } else false
+    }
 
     /**
      * Добавить номер телефона.
@@ -47,8 +55,6 @@ class PhoneBook {
      * либо у него уже был такой номер телефона,
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
-    private val map = mutableMapOf<String, String>()
-    private val listOfPhones = mutableListOf<String>()
     fun addPhone(name: String, phone: String): Boolean {
         map[phone] = name
         if (name in list) {
@@ -57,6 +63,7 @@ class PhoneBook {
                 true
             } else false
         }
+
         return false
     }
 
@@ -68,16 +75,11 @@ class PhoneBook {
      */
 
     fun removePhone(name: String, phone: String): Boolean {
-        val deletePhones = mutableListOf<String>()
-        addPhone(name, phone)
-        if (phone in listOfPhones) {
-            if (phone in deletePhones) {
-                return false
-            } else {
-                deletePhones.add(phone)
-            }
+        if (phone in map.keys && map[phone] == name) {
+            map.remove(phone)
             return true
-        } else return false
+        }
+        return false
     }
 
     /**
@@ -90,7 +92,6 @@ class PhoneBook {
         map.forEach { (n) ->
             if (map[n] == name) {
                 result.add(n)
-                println(result)
             }
         }
         return result.toSet()
@@ -100,25 +101,31 @@ class PhoneBook {
      * Вернуть имя человека по заданному номеру телефона.
      * Если такого номера нет в книге, вернуть null.
      */
-    fun humanByPhone(phone: String): String? = map[phone]
-
-    /**
-     * Две телефонные книги равны, если в них хранится одинаковый набор людей,
-     * и каждому человеку соответствует одинаковый набор телефонов.
-     * Порядок людей / порядок телефонов в книге не должен иметь значения.
-     */
-    override fun equals(other: Any?): Boolean {
-        return if (other is PhoneBook) {
-            list.sorted() == other.list.sorted() && map.toSortedMap() == other.map.toSortedMap()
-        } else {
-            false
+    fun humanByPhone(phone: String): String? {
+        if (phone in map.keys) {
+            return map[phone]
         }
+        return null
+    }
+
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PhoneBook
+
+        if (list.sorted() != other.list.sorted()) return false
+        if (map.toSortedMap(compareBy { it }) != other.map.toSortedMap(compareBy { it })) return false
+        if (listOfPhones.sorted() != other.listOfPhones.sorted()) return false
+
+        return true
     }
 
     override fun hashCode(): Int {
-        var result = list.hashCode()
-        result = 31 * result + map.hashCode()
-        result = 31 * result + listOfPhones.hashCode()
+        var result = list.sorted().hashCode()
+        result = 31 * result + map.toSortedMap(compareBy { it }).hashCode()
+        result = 31 * result + listOfPhones.sorted().hashCode()
         return result
     }
 }
