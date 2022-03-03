@@ -93,7 +93,7 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
                 k += 1
             }
         }
-        return Polynom(*result) // (1.0, -1.0, 2.0, 6.0)
+        return Polynom(*result)
     }
 
     /**
@@ -131,7 +131,7 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
                 k += 1
             }
         }
-        return Polynom(*result) // (1.0, -1.0, 2.0, 6.0)
+        return Polynom(*result)
     }
 
     /**
@@ -167,11 +167,11 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
      */
 
     operator fun div(other: Polynom): Polynom {
-        var cf = coeffList.reversed().dropWhile { it == 0.0 }.toMutableList()// (1.0, -2.0, -1.0, 4.0)
-        val ocf = other.coeffList.reversed().dropWhile { it == 0.0 }.toMutableList() // (1.0, 3.0, 2.0)
+        var cf = coeffList.reversed().dropWhile { it == 0.0 }.toMutableList()
+        val ocf = other.coeffList.reversed().dropWhile { it == 0.0 }.toMutableList()
         var result = doubleArrayOf()
         val cfSize = cf.size
-        val archivePolynom = DoubleArray(ocf.size) // для изменений p1
+        val archivePolynom = DoubleArray(ocf.size)
 //        val set = mutableSetOf<Double>()
 //        cf.forEach { num ->
 //            if (num != 1.0 || num != 0.0) {
@@ -219,21 +219,9 @@ class Polynom(vararg coeffs: Double) { // неизвестно точное ко
                 }
                 cf = cf.dropWhile { it == 0.0 }.toMutableList()
                 k += 1
-//                val flag = true
-//                cf.forEachIndexed { ind, num ->
-//                    if (cf[ind] != archivePolynom[ind]) {
-//                        !flag
-//                    }
-//                }
-//                if (flag && rem == true) {
-//                    return Polynom(0.0)
-//                }
-//                if (flag && rem == false) {
-//                    return Polynom(1.0)
-//                }
             }
         }
-        return Polynom(*result) // целого - нет
+        return Polynom(*result)
     }
 
     /**
